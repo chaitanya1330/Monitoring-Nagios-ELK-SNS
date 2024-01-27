@@ -1,0 +1,50 @@
+nagios installation part:
+
+ec2-instance -ubuntu 20.04 --version
+https://www.howtoforge.com/tutorial/how-to-install-nagios-on-ubuntu-2004/
+
+after installing we should open security group ports: one is 5666 for firewall nd another one is port 80
+
+Editing in the nagios configuration:
+
+define contact {
+
+    contact_name            nagiosadmin             ; Short name of user
+    use                     generic-contact         ; Inherit default values from generic-contact template (defined above)
+    alias                   Nagios Admin            ; Full name of user
+    email                   chaitanyavantaku@gmail.com ; <<***** CHANGE THIS TO YOUR EMAIL ADDRESS ******
+}
+
+commands to check in nagios:
+
+/usr/lib/nagios/plugins/check_ping -H localhost -w 100.00,20% -c 500.00,60%
+/usr/lib/nagios/plugins/check_nrpe -H 172.31.34.118
+/usr/lib/nagios/plugins/check_nrpe -H client_server -c check_nginx
+
+Here's a simple overview of how NRPE works:
+
+-> Nagios server sends a check command to the NRPE daemon on the remote host.
+-> NRPE daemon executes the corresponding plugin or script locally.
+-> The output of the plugin/script is sent back to the Nagios server.
+-> Nagios server processes the output and triggers alerts or notifications based on predefined thresholds.
+
+credentials:
+
+user is nagiosadmin
+password is chay@1234
+
+service file name:
+Service name: nagios-nrpe-server
+
+path of configuration file:
+/usr/sbin/nrpe -c /etc/nagios/nrpe.cfg
+
+commands while troubleshooting:
+
+netstat -at | grep nrpe
+ps ax | grep nrpe
+netstat -taupne | grep LIST
+systemctl list-units | grep ufw
+systemctl list-units | grep ipt
+systemctl stop firewalld.service
+curl http://172.31.34.118

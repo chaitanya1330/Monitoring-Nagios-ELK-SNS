@@ -1,0 +1,67 @@
+user : kibanaadmin
+pass : chay@1234
+
+first i took 3 servers:
+1) elk server ---- installed only elastic search
+
+ inside the configuration of elastic.yml file:
+///uncommenting this lines///
+  cluster.name: my-application
+  node.name: node-1
+  path.logs: /var/log/elasticsearch
+  path.data: /var/lib/elasticsearch 
+  network.host: <kibanaserver_ip>
+  http.port: 9200
+To check elastic search is working or not
+curl -X GET "localhost:9200"
+---------------------------------------------------------------------------------------------
+2) production server ---installed only nginx and filebeat --in filebeat modules we should enable nginx module also
+  filebeat is for collecting logs from nginx and send it to logstash 
+  filebeat config file:
+  filebeat.inputs: sudo nano /etc/filebeat/filebeat.yml :
+type: log
+  paths:
+    - /var/log/nginx/access.log.1
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml   
+  reload.enabled: true
+  reload.period: 10s
+setup.template.settings:
+  index.number_of_shards: 1
+output.logstash:
+  hosts: ["ELK server private IP:5044"]
+--------------------------------------------------------------------------------------------
+3) kibana server ---installed kibana and logstash
+to create a user and password and store it in /etc/nginx/htpasswd.users
+ echo "kibanaadmin:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
+in kabana.yml: ///uncomment these two///
+server.port: 5601
+server.host: "localhost"
+-------------------------
+logstash configuration file: ----sudo nano /etc/logstash/conf.d/logstash.conf
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+        grok {
+        match => ["message", "%{GREEDYDATA}\|%{GREEDYDATA}%{INT}m%{GREEDYDATA:host_requested}%{SPACE}%{IP:client_ip}%{SPACE}\-%{SPACE}\-%{SPACE}\[%{HTTPDATE:timestamp}\]%{GREEDYDATA:body}"]     
+        }
+}
+output {
+        elasticsearch {
+                hosts => ["http://localhost:9200"]
+                manage_template => false
+		index => "nginx-index"
+        }
+}
+
+to test the logstash:  sudo -u logstash /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+to check whether index pattern is created or not : curl 'localhost:9200/_cat/indices?v'
+
+---------------------------------------------------------------------------------------------------------------
+Then open browser and type the ip of kibana_ip:5601---it will not work
+next u should install nginx in that server and give the nginx config file because externally port 5601 it will not open..only ip will work
+but only ip without nginx we cant give ..thats y installing nginx to proxy pass

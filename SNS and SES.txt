@@ -1,0 +1,35 @@
+SES through Cloudwatch implemented : same like that but we didnt implement
+Here we can send emails from one to one
+                             one to many
+                             many to many 
+                             one inside one 
+SNS through Cloudwatch implemented :
+
+1) created ec2 instance 
+2) go to cloudwatch and create an alarm and give the metrics
+ metrics should be cpu utilization in avg mode
+with instance_id --"id"
+if threshold increases 25 then alarm will send to my mail and instance will automatically stop
+
+configuring sns:
+create a topic :You create an SNS topic within your AWS account.
+               Each topic is assigned a unique Amazon Resource Name (ARN) 
+               that serves as its identifier.
+
+Let's consider a real-time example involving a news service that utilizes Amazon SNS topics.
+Service: News Alert System ---topic name
+Subscribers:
+Subscriber 1: Email subscriber (john@example.com)
+Subscriber 2: SMS subscriber (8179151958)
+Subscriber 3: Lambda function (NotifyBreakingNews)
+Publishing a Breaking News Alert:
+
+The News Alert System receives breaking news about an important event.
+The system publishes a message to the "BreakingNewsAlerts" topic.
+
+Thats it!!! in our case --topic is cloudwatch_alarm
+ans subcriber is me through my email -chaitanyavantaku@gmail.com
+message is :HEy team::!! instance cpu is grater than its threshold;;;
+
+We can also create log groups for our instance ..but we should install 
+cloudwatch agent inside or linux server and small stuff to do

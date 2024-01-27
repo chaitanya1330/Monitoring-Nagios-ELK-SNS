@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://jpnix.dreamwidth.org/2094.html -->
+<html lang="en" class=" csstransforms csstransitions flexbox fontface generatedcontent touchevents touch"><head profile="http://www.w3.org/2006/03/hcard http://purl.org/uF/hAtom/0.1/ http://gmpg.org/xfn/11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta class="foundation-mq-small"><meta class="foundation-mq-small-only"><meta class="foundation-mq-medium"><meta class="foundation-mq-medium-only"><meta class="foundation-mq-large"><meta class="foundation-mq-large-only"><meta class="foundation-mq-xlarge"><meta class="foundation-mq-xlarge-only"><meta class="foundation-mq-xxlarge"><meta class="foundation-data-attribute-namespace">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="help" href="https://www.dreamwidth.org/support/faq">
+<link rel="apple-touch-icon" href="https://www.dreamwidth.org/apple-touch-icon.png">
+<meta property="og:image:width" content="363">
+<meta property="og:image:height" content="363">
+
+<link rel="prev" href="https://www.dreamwidth.org/go?dir=prev&amp;itemid=2094&amp;journal=jpnix">
+<link rel="next" href="https://www.dreamwidth.org/go?dir=next&amp;itemid=2094&amp;journal=jpnix">
+<link rel="canonical" href="https://jpnix.dreamwidth.org/2094.html">
+<script>
+// don't crawl this.  read http://www.livejournal.com/developer/exporting
+var LJ_cmtinfo = {"journal":"jpnix","canAdmin":null,"302":{"rc":[],"parent":null,"screened":0,"u":"dflick","full":1,"deleted":0},"remote":"","form_auth":"c0:1704430800:3172:86400:8Tf07sKizW-0-oJrE1MUIo33zUmH:26a95d1cc89a518f174a74593308c7c7","canSpam":"1"}
+</script>
+            <script type="text/javascript">
+                var Site;
+                if (!Site)
+                    Site = {};
+
+                Site = Object.assign(Site, {"ctx_popup_userhead":1,"media_embed_enabled":1,"cmax_comment":16000,"statprefix":"https://www.dreamwidth.org/stc","ctx_popup_icons":1,"user_domain":"dreamwidth.org","iconprefix":"https://v.dreamwidth.org","imgprefix":"https://www.dreamwidth.org/img","has_remote":0,"inbox_update_poll":1,"currentJournalBase":"https://jpnix.dreamwidth.org","currentJournal":"jpnix","esn_async":1,"ctx_popup":1,"siteroot":"https://www.dreamwidth.org"});
+           </script>
+        <link rel="stylesheet" type="text/css" href="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/saved_resource">
+<link rel="stylesheet" type="text/css" href="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/saved_resource(1)">
+<link rel="stylesheet" href="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/stylesheet" type="text/css">
+<title>jpnix | Setting up Nagios to publish alerts to SNS topic in AWS</title>
+<style></style><meta class="foundation-mq-topbar"></head><body class="page-entry two-columns column-left any-column multiple-columns two-columns-left  logged-out  not-subscribed no-access  has-navstrip">
+
+<div id="lj_controlstrip">
+
+<div id="lj_controlstrip_loggedout_userpic">
+  
+</div>
+  <div id="lj_controlstrip_login">
+    <form id="login" class="lj_login_form" action="https://www.dreamwidth.org/login?ret=1" method="post"><input type="hidden" name="mode" value="login"><input type="hidden" name="returnto" value="https://jpnix.dreamwidth.org/2094.html">      
+        <label for="xc_user" class="invisible">
+            Account name:
+        </label>
+        <input type="text" tabindex="1" class="text" id="xc_user" value="" name="user" placeholder="Account name:" size="7" maxlength="27">
+      
+        <label for="xc_password" class="invisible">
+            Password
+        </label>
+        <input type="password" placeholder="Password" name="password" size="7" tabindex="2" value="" id="xc_password" class="lj_login_password">
+      <input type="submit" value="Log in" class="submit" tabindex="4">
+
+      <div id="lj_controlstrip_login_secondary_controls">
+        <a href="https://www.dreamwidth.org/openid/" tabindex="5">(OpenID?)</a>
+        <a href="https://www.dreamwidth.org/lostinfo" tabindex="6">(Forgot it?)</a>
+        <input type="checkbox" class="checkbox" value="1" id="xc_remember" tabindex="3" name="remember_me">
+        <label for="xc_remember" class="checkboxlabel">
+            Remember Me
+        </label>
+        
+      </div>
+    </form>
+  </div>
+<div id="lj_controlstrip_actionlinks">
+  <span id="lj_controlstrip_statustext">You're viewing <span lj:user="jpnix" style="white-space: nowrap;" class="ljuser"><a href="https://jpnix.dreamwidth.org/profile"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/user.png" alt="[personal profile] " width="17" height="17" style="vertical-align: text-bottom; border: 0; padding-right: 1px;" class="ContextualPopup-trigger"></a><a href="https://jpnix.dreamwidth.org/"><b>jpnix</b></a></span>'s journal</span>
+  <br><a href="https://www.dreamwidth.org/create">Create a Dreamwidth Account</a>&nbsp;&nbsp;<a href="https://www.dreamwidth.org/">Learn More</a></div>
+
+<div id="lj_controlstrip_search"><div class="appwidget appwidget-search" id="LJWidget_258">
+<form action="https://www.dreamwidth.org/multisearch" method="post">
+<input type="text" name="q" size="20" title="Search" class="text" id="search"> <select name="type" class="select">
+<option value="int" selected="selected">Interest</option>
+<option value="region">Region</option>
+<option value="nav_and_user">Site and Account</option>
+<option value="faq">FAQ</option>
+<option value="email">Email</option>
+</select> <input type="submit" value="Go"></form></div><!-- end .appwidget-search -->
+
+  Reload page in style:&nbsp;&nbsp;<a href="https://jpnix.dreamwidth.org/2094.html?style=site">site</a>&nbsp;&nbsp; <a href="https://jpnix.dreamwidth.org/2094.html?style=light">light</a></div>
+
+</div>
+
+    <div id="canvas">
+        <div class="inner">
+            <div id="content">
+            <div id="header">
+                <div class="inner">
+                    <div class="module-wrapper"><div class="separator separator-before"><div class="inner"></div></div>
+<div class="module-section-header">
+<div class="inner"><div class="module-navlinks module"><h2 class="module-header">Navigation</h2>
+<div class="module-content">
+<ul class="module-list">
+<li class="module-list-item list-item-recent"><a href="https://jpnix.dreamwidth.org/" class="recent">Recent Entries</a></li>
+<li class="module-list-item list-item-archive"><a href="https://jpnix.dreamwidth.org/archive" class="archive">Archive</a></li>
+<li class="module-list-item list-item-read"><a href="https://jpnix.dreamwidth.org/read" class="read">Reading</a></li>
+<li class="module-list-item list-item-tags"><a href="https://jpnix.dreamwidth.org/tag/" class="tags">Tags</a></li>
+<li class="module-list-item list-item-memories"><a href="https://www.dreamwidth.org/tools/memories?user=jpnix" class="memories">Memories</a></li>
+<li class="module-list-item list-item-userinfo"><a href="https://jpnix.dreamwidth.org/profile" class="userinfo">Profile</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="separator separator-after"><div class="inner"></div></div>
+</div><h1 id="title"><span><a href="https://jpnix.dreamwidth.org/">James Permenter</a></span></h1><h2 id="pagetitle"><span>Setting up Nagios to publish alerts to SNS topic in AWS</span></h2>
+
+                </div><!-- end header>inner -->
+            </div><!-- end header -->
+                <div class="inner">
+    
+                    <div id="primary"><div class="inner">
+                        <div class="entry-wrapper entry-wrapper-odd security-public restrictions-none journal-type-P poster-jpnix journal-jpnix has-userpic  has-subject" id="entry-wrapper-2094">
+<div class="separator separator-before"><div class="inner"></div></div>
+<div class="entry" id="entry-2094">
+<div class="inner">
+<div class="header">
+<div class="inner">
+<h3 class="entry-title"><a title="Setting up Nagios to publish alerts to SNS topic in AWS" href="https://jpnix.dreamwidth.org/2094.html">Setting up Nagios to publish alerts to SNS topic in AWS</a></h3><span class="datetime"><span class="date"><a href="https://jpnix.dreamwidth.org/2016/04/">Apr</a>. <a href="https://jpnix.dreamwidth.org/2016/04/11/">11th</a>, <a href="https://jpnix.dreamwidth.org/2016/">2016</a></span> <span class="time">04:23 pm</span></span></div>
+</div>
+<div>
+<div class="contents">
+<div class="inner">
+<div class="userpic"><a href="https://jpnix.dreamwidth.org/icons" class="ContextualPopup-trigger"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/2299108" title="jpnix: (Default)" alt="jpnix: (Default)" height="75" width="54"></a></div>
+<span class="poster entry-poster "><span lj:user="jpnix" style="white-space: nowrap;" class="ljuser"><a href="https://jpnix.dreamwidth.org/profile"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/user.png" alt="[personal profile] " width="17" height="17" style="vertical-align: text-bottom; border: 0; padding-right: 1px;" class="ContextualPopup-trigger"></a><a href="https://jpnix.dreamwidth.org/"><b>jpnix</b></a></span></span><div class="entry-content"><img src="https://s15.postimg.org/nfqxbsva3/nagiosheartaws.png" alt="Nagios Hearts AWS" class=""><br><br><br><br>Good ol' Nagios. The monitoring system that just won't die and for good reason it does what we want and does it well. <br><br>I found there were not very many good resources on setting up nagios alerts to publish to SNS topics for SMS subscriptions so I did the leg work and am presenting it here.<br><br>Note: Its expected that you already have Nagios set up on a server and understand at least the basics of configuration definitions.&nbsp;<br><br><span style="font-size: larger;"><u><strong>Setting up the SNS topic in AWS<br></strong></u></span><br>The first step we need to do is actually set up the SNS topic via the AWS dashboard.<br><br><img src="https://s10.postimg.org/pht8v5rfd/1_create_topic.png" alt="create the sns topic" class=""><br><br><br>Make sure you get the Topic ARN after creating it, we will need to create a service account and IAM policy to publish the nagios alerts to the topic. It will look like <code>arn:aws:sns:us-east-1:101010101010:nagios-publish</code> where 101010101010 is your account number.<br><br>While you're in the Topics dashboard create subscriptions for the engineers that may want to be alerted to nagios alerts by clicking the "create subscription" button<br><br><img src="https://s10.postimg.org/qlhykv1g9/2_create_subscription.png" alt="create sms subscription to the sns topic" class=""><br><br>go to <a href="https://console.aws.amazon.com/iam/home?region=us-east-1#/users">https://console.aws.amazon.com/iam/home?region=us-east-1#/users</a> and create the user that will have access to publish. I always use explicit naming conventions to easily manage them via IAM. In this case it will be <code>service.nagios</code>. Save the access and secret key values that are created for the user. <br><br>Now create a policy <code>policy.nagios-sns</code> with the following permissions.<br><br><pre style="word-wrap: break-word; white-space: pre-wrap;">{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            
+            "Effect": "Allow",
+            "Action": [
+                "sns:Publish"
+            ],
+            "Resource": [
+                "arn:aws:sns:us-east-1:101010101010:nagios"
+            ]
+        }
+    ]
+}
+</pre><br><br><br><span style="font-size: larger;"><u><strong>Nagios Integration<br></strong></u></span><br><br><br>first thing you are going to want to do is add the <code>aws_access_key_id</code> and <code>aws_secret_access_key</code> to the server nagios is on under the nagios user (or whatever user the nagios service was set up to run under)<br><br>By default the user that runs the nagios service has its shell set to <code>/bin/nologin</code> but you can get around that by issuing as root <code>su - nagios -s /bin/bash</code><br><br>If you're already on an AWS instance you can just issue command <code>aws configure</code> if nagios is not running in amazon install the awscli client by following steps here <a href="http://docs.aws.amazon.com/cli/latest/userguide/installing.html">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</a> once you add the keys they are stored in <code>~nagios/.aws/credentials</code> and the policy you created for the service account tied to these keys will be permitted.<br><br>We are going to create a separate contact template and command inside our nagios configuration just for being alerted via SNS. Navigate to the objects directory inside your nagios installation. my path is <code>/usr/local/nagios/etc/objects</code> and edit the file <code>templates.cfg</code> in  search for <code>generic-contact</code> we are pretty much copying everything from that generic contact default entry and just changing names around and passing a different command. The bottom is our copied and edited entry that we need named sns-contact.<br><br><br><pre style="word-wrap: break-word; white-space: pre-wrap;"># Generic contact definition template - This is NOT a real contact, just a template!
+
+define contact{
+        name                            generic-contact         ; The name of this contact template
+        service_notification_period     24x7                    ; service notifications can be sent anytime
+        host_notification_period        24x7                    ; host notifications can be sent anytime
+        service_notification_options    w,u,c,r,f,s             ; send notifications for all service states, flapping events, and scheduled downtime events
+        host_notification_options       d,u,r,f,s               ; send notifications for all host states, flapping events, and scheduled downtime events
+        service_notification_commands   notify-service-by-email ; send service notifications via email
+        host_notification_commands      notify-host-by-email    ; send host notifications via email
+        register                        0                       ; DONT REGISTER THIS DEFINITION - ITS NOT A REAL CONTACT, JUST A TEMPLATE!
+        }
+
+
+define contact{
+        name                            sns-contact         ; The name of this contact template
+        service_notification_period     24x7                    ; service notifications can be sent anytime
+        host_notification_period        24x7                    ; host notifications can be sent anytime
+        service_notification_options    w,u,c,r,f,s             ; send notifications for all service states, flapping events, and scheduled downtime events
+        host_notification_options       d,u,r,f,s               ; send notifications for all host states, flapping events, and scheduled downtime events
+        service_notification_commands   notify-service-by-sns ; send service notifications via email
+        host_notification_commands      notify-host-by-sns    ; send host notifications via email
+        register                        0                       ; DONT REGISTER THIS DEFINITION - ITS NOT A REAL CONTACT, JUST A TEMPLATE!
+        }
+</pre><br><br>The real magic behind the nagios aws sns integration is within the command itself. Its how we publish alerts to the topic.<br><br>edit the configuartion file <code>/usr/local/nagios/etc/objects/commands.cfg</code> and add this under sample notification commands.<br><br><pre style="word-wrap: break-word; white-space: pre-wrap;"># 'notify-host-by-sns' command definition
+define command{
+        command_name    notify-host-by-sns
+        command_line    /usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\nHost: $HOSTNAME$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\n\nDate/Time: $LONGDATETIME$\n" | aws sns publish --topic-arn arn:aws:sns:us-east-1:101010101010:nagios --message "$NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$"
+        }
+
+# 'notify-service-by-sns' command definition
+define command{
+        command_name    notify-service-by-sns
+        command_line    /usr/bin/printf "%b" "***** Nagios *****\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\n\nDate/Time: $LONGDATETIME$\n\nAdditional Info:\n\n$SERVICEOUTPUT$\n" |  aws sns publish --topic-arn arn:aws:sns:us-east-1:101010101010:nagios --message "$NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$"
+        }
+</pre><br><br>We're almost done now. The last thing we have to do is define a contact group and contact to inherit the sns-contact object definitions.<br><br>Wherever you have your contacts defined add the entry<br><br><pre style="word-wrap: break-word; white-space: pre-wrap;">#################################################################################
+# SMS  Admin contact group                                                      #
+#################################################################################
+
+define contactgroup{
+        contactgroup_name       smsadmins
+        alias                   SMS Nagios Administrators
+        members                 sms-distro
+        }
+
+
+
+define contact{
+        contact_name                    sns            ; Short name of user
+        use                             sns-contact         ; Inherit default values from generic-contact template (defined above)
+        alias                           SNS Alert          ; Full name of user
+        service_notification_options    c,r
+        }
+</pre><br><br><br>From here on out when you define a new server check that you want to get SMS notifications for you would just add the contact group we just created to the check.<br><br><pre style="word-wrap: break-word; white-space: pre-wrap;"># Define a service to "ping" the local machine
+
+define service{
+        use                             remote-service,srv-pnp         ; Name of service template to use
+        host_name                       serverName
+        service_description             PING
+        contact_groups                  snsgroup,emailadmins
+	check_command			check_ping!250.0,20%!500.0,60%
+        }
+</pre><br><br>Finally after all the work you can now publish nagios alerts to the SNS topic and get those alerts through SMS subscription.<br><br><br><br><img src="https://s30.postimg.org/fdf7aa39d/3_text_alerts_nagios_sns.png" alt="SNS topic to SMS subscription nagios alerts" class=""></div></div>
+</div>
+</div>
+<div class="footer">
+<div class="inner">
+<div class="tag"><span class="tag-text" data-journal="jpnix" data-ditemid="2094">Tags:</span><input class="tag-nav-trigger" type="image" aria-expanded="false" alt="Show tag navigation" title="Tag navigation: Select this button, then a tag, then use the arrows displayed to navigate through entries with that tag." src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/add.png"><ul>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/aws">aws</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/cloud">cloud</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/devops">devops</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/infrastructure">infrastructure</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/job">job</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/linux">linux</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/monitoring">monitoring</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/nagios">nagios</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/servers">servers</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/sns+topic">sns topic</a>,</li>
+<li><a rel="tag" href="https://jpnix.dreamwidth.org/tag/sysadmin">sysadmin</a></li>
+</ul></div><ul class="entry-management-links icon-links"><li class="link link_prev first-item"> <a href="https://www.dreamwidth.org/go?dir=prev&amp;itemid=2094&amp;journal=jpnix"><img border="0" width="16" height="16" alt="Previous Entry" title="Previous Entry" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/previous.png"></a></li>
+<li class="link mem_add"><a href="https://www.dreamwidth.org/tools/memadd?journal=jpnix&amp;itemid=2094"><img border="0" width="16" height="16" alt="Add Memory" title="Add Memory" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/memories_add.png"></a></li>
+<li class="link tell_friend"><a href="https://www.dreamwidth.org/tools/tellafriend?journal=jpnix&amp;itemid=2094"><img border="0" width="16" height="16" alt="Share This Entry" title="Share This Entry" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/tellafriend.png"></a></li>
+<li class="link link_next"> <a href="https://www.dreamwidth.org/go?dir=next&amp;itemid=2094&amp;journal=jpnix"><img border="0" width="16" height="16" alt="Next Entry" title="Next Entry" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/next.png"></a></li>
+</ul><hr class="above-entry-interaction-links"><ul class="entry-interaction-links text-links"><li class="entry-readlink first-item"><a href="https://jpnix.dreamwidth.org/2094.html#comments" data-sing="1 comment" data-dual="2 comments" data-plur="3 comments">1 comment</a></li>
+<li class="entry-replylink"><a onclick="return function(that) {return quickreply(&quot;topcomment&quot;, 0, &quot;&quot;,that)}(this)" href="https://jpnix.dreamwidth.org/2094.html?mode=reply">Reply</a></li>
+</ul><div id="ljqrttopcomment" data-quickreply-container="topcomment" style="display: none;"></div><hr class="below-reply-container"></div>
+</div>
+</div>
+</div>
+<div class="separator separator-after"><div class="inner"></div></div>
+</div>
+<div id="comments"><div class="inner"><div class="comment-pages toppages"><span class="view-flat"><a href="https://jpnix.dreamwidth.org/2094.html?view=flat#comments">Flat</a></span> | <span class="view-top-only"><a href="https://jpnix.dreamwidth.org/2094.html?view=top-only#comments">Top-Level Comments Only</a></span></div><div data-comment-depth="1" style="--comment-depth: 1; --comment-indent-limit-mobile: 8" class="comment-thread comment-depth-indent-desktop comment-depth-indent-mobile comment-depth-odd comment-depth-mod5-1 comment-depth-1">
+<div id="cmt302" class="dwexpcomment" style="margin-left: 0px; margin-top: 5px;">
+<div class="comment-wrapper comment-wrapper-odd visible    poster-dflick  full no-userpic  has-subject">
+<div class="separator separator-before"><div class="inner"></div></div>
+<div class="comment" id="comment-cmt302">
+<div class="inner">
+<div class="header">
+<div class="inner">
+<h4 class="comment-title"><a title="How do you test?" href="https://jpnix.dreamwidth.org/2094.html?thread=302#cmt302">How do you test?</a></h4><span class="datetime"><span class="comment-date-text">Date: </span> <span title="364 days after journal entry">2018-05-24 06:32 am (UTC)</span></span></div>
+</div>
+<div class="contents">
+<div class="inner">
+<div class="userpic"></div>
+<span class="poster comment-poster"><span class="comment-from-text">From:</span> <span lj:user="dflick" style="white-space: nowrap;" class="ljuser"><a href="https://dflick.dreamwidth.org/profile"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/user.png" alt="[personal profile] " width="17" height="17" style="vertical-align: text-bottom; border: 0; padding-right: 1px;" class="ContextualPopup-trigger"></a><a href="https://dflick.dreamwidth.org/"><b>dflick</b></a></span></span>
+<div class="comment-content">I set this up in Nagios XI so the contacts and commands were done in the GUI due to them being saved in the database.  I tested alerting and the AWS alerts are not working.  How can I test and troubleshoot?</div></div>
+</div>
+<div class="footer">
+<div class="inner">
+<ul class="comment-interaction-links text-links"><li class="link commentpermalink"><a href="https://jpnix.dreamwidth.org/2094.html?thread=302#cmt302">Link</a></li>
+<li class="link reply first-item"><a onclick="return function(that) {return quickreply(&quot;302&quot;, 1, &quot;Re: How do you test?&quot;,that)}(this)" href="https://jpnix.dreamwidth.org/2094.html?replyto=302">Reply</a></li>
+</ul><div id="ljqrt302" data-quickreply-container="302" style="display: none;"></div></div>
+</div>
+</div>
+</div>
+<div class="separator separator-after"><div class="inner"></div></div>
+</div>
+</div></div>
+<div class="bottomcomment"><ul class="entry-management-links icon-links"><li class="link link_prev first-item"> <a href="https://www.dreamwidth.org/go?dir=prev&amp;itemid=2094&amp;journal=jpnix"><img border="0" width="16" height="16" alt="Previous Entry" title="Previous Entry" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/previous.png"></a></li>
+<li class="link mem_add"><a href="https://www.dreamwidth.org/tools/memadd?journal=jpnix&amp;itemid=2094"><img border="0" width="16" height="16" alt="Add Memory" title="Add Memory" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/memories_add.png"></a></li>
+<li class="link tell_friend"><a href="https://www.dreamwidth.org/tools/tellafriend?journal=jpnix&amp;itemid=2094"><img border="0" width="16" height="16" alt="Share This Entry" title="Share This Entry" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/tellafriend.png"></a></li>
+<li class="link link_next"> <a href="https://www.dreamwidth.org/go?dir=next&amp;itemid=2094&amp;journal=jpnix"><img border="0" width="16" height="16" alt="Next Entry" title="Next Entry" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/next.png"></a></li>
+</ul><ul class="entry-interaction-links text-links"><li class="entry-readlink first-item"><a href="https://jpnix.dreamwidth.org/2094.html#comments" data-sing="1 comment" data-dual="2 comments" data-plur="3 comments">1 comment</a></li>
+<li class="entry-replylink"><a onclick="return function(that) {return quickreply(&quot;bottomcomment&quot;, 0, &quot;&quot;,that)}(this)" href="https://jpnix.dreamwidth.org/2094.html?mode=reply">Reply</a></li>
+</ul><div id="ljqrtbottomcomment" data-quickreply-container="bottomcomment" style="display: none;"></div></div><div class="comment-pages bottompages"><span class="view-flat"><a href="https://jpnix.dreamwidth.org/2094.html?view=flat#comments">Flat</a></span> | <span class="view-top-only"><a href="https://jpnix.dreamwidth.org/2094.html?view=top-only#comments">Top-Level Comments Only</a></span></div></div></div>
+                    </div></div><!-- end primary and primary>inner -->
+    
+                    <div id="secondary"><div class="inner">
+    <div class="module-wrapper"><div class="separator separator-before"><div class="inner"></div></div>
+<div class="module-section-one">
+<div class="inner"><div class="module-userprofile module"><h2 class="module-header"><a href="https://jpnix.dreamwidth.org/profile">Profile</a></h2>
+<div class="module-content">
+<div class="userpic"><a href="https://jpnix.dreamwidth.org/icons" class="ContextualPopup-trigger"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/2299108" title="jpnix: (Default)" alt="jpnix: (Default)" height="100" width="72"></a></div><div class="journal-name">JPNIX</div>
+</div>
+</div>
+<div class="module-calendar module"><h2 class="module-header"><a href="https://jpnix.dreamwidth.org/2023/01/">January</a> <a href="https://jpnix.dreamwidth.org/2023/">2023</a></h2>
+<div class="module-content">
+<table summary="Monthly calendar with links to each day&#39;s entries">
+<tbody><tr>
+<th>S</th>
+<th>M</th>
+<th>T</th>
+<th>W</th>
+<th>T</th>
+<th>F</th>
+<th>S</th>
+</tr>
+<tr>
+<td class="empty-day">1</td><td class="empty-day">2</td><td class="empty-day">3</td><td class="empty-day">4</td><td class="empty-day">5</td><td class="empty-day">6</td><td class="empty-day">7</td></tr>
+<tr>
+<td class="empty-day">8</td><td class="empty-day">9</td><td class="empty-day">10</td><td class="empty-day">11</td><td class="empty-day">12</td><td class="empty-day">13</td><td class="entry-day"> <a href="https://jpnix.dreamwidth.org/2023/01/14/" title="1 entry">14</a></td></tr>
+<tr>
+<td class="empty-day">15</td><td class="empty-day">16</td><td class="empty-day">17</td><td class="empty-day">18</td><td class="entry-day"> <a href="https://jpnix.dreamwidth.org/2023/01/19/" title="1 entry">19</a></td><td class="empty-day">20</td><td class="empty-day">21</td></tr>
+<tr>
+<td class="empty-day">22</td><td class="empty-day">23</td><td class="empty-day">24</td><td class="empty-day">25</td><td class="empty-day">26</td><td class="empty-day">27</td><td class="entry-day"> <a href="https://jpnix.dreamwidth.org/2023/01/28/" title="1 entry">28</a></td></tr>
+<tr>
+<td class="empty-day">29</td><td class="empty-day">30</td><td class="empty-day">31</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table>
+</div>
+</div>
+<div class="module-tags_list module"><h2 class="module-header"><a href="https://jpnix.dreamwidth.org/tag/">Most Popular Tags</a></h2>
+<div class="module-content">
+<ul class="module-list">
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/animation">animation</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/aws">aws</a> - <span class="detail-tagcount">6 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/bash">bash</a> - <span class="detail-tagcount">8 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/bepush">bepush</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/c">c</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/cat">cat</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/clamav">clamav</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/cloud">cloud</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/cyber+security">cyber security</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/debian">debian</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/devops">devops</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/dropbox">dropbox</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/electronics">electronics</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/embedded+systems">embedded systems</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/facebook">facebook</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/firefox">firefox</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/firmware">firmware</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/fun">fun</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/geoblock">geoblock</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/hack">hack</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/home+security">home security</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/hpc">hpc</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/infrastructure">infrastructure</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/interview">interview</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/job">job</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/linux">linux</a> - <span class="detail-tagcount">15 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/linux+geek">linux geek</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/malware">malware</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/monitoring">monitoring</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/n00b">n00b</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/nagios">nagios</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/openbox">openbox</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/opensuse">opensuse</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/paranoia">paranoia</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/parsing">parsing</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/phish">phish</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/plymouth">plymouth</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/polybar">polybar</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/programming">programming</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/scripting">scripting</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/security">security</a> - <span class="detail-tagcount">2 uses</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/shell">shell</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/sns+topic">sns topic</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/sound+driver">sound driver</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/splash">splash</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/sprite">sprite</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/supercomputer">supercomputer</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/top500">top500</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/workaround">workaround</a> - <span class="detail-tagcount">1 use</span></li>
+
+<li class="visibility-public module-list-item"><a href="https://jpnix.dreamwidth.org/tag/workspaces">workspaces</a> - <span class="detail-tagcount">1 use</span></li>
+
+</ul>
+</div>
+</div>
+<div class="module-pagesummary module"><h2 class="module-header">Page Summary</h2>
+<div class="module-content">
+<ul class="module-list">
+<li class="module-list-item"><span class="pagesummary-poster"><span lj:user="dflick" style="white-space: nowrap;" class="ljuser"><a href="https://dflick.dreamwidth.org/profile"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/user.png" alt="[personal profile] " width="17" height="17" style="vertical-align: text-bottom; border: 0; padding-right: 1px;" class="ContextualPopup-trigger"></a><a href="https://dflick.dreamwidth.org/"><b>dflick</b></a></span></span> - <span class="pagesummary-subject"><a href="https://jpnix.dreamwidth.org/2094.html#cmt302" title="0 responses">How do you test?</a></span></li>
+</ul>
+</div>
+</div>
+<div class="module-credit module"><h2 class="module-header">Style Credit</h2>
+<div class="module-content">
+<ul class="module-list"><li class="module-list-item"><span class="category-title">Style:</span> <span class="theme-name">Retro</span> for <span class="style-name"><a href="https://www.dreamwidth.org/customize/?layoutid=515923">Patsy</a></span> by <span class="style-author"><span lj:user="sforzinda" style="white-space: nowrap;" class="ljuser"><a href="https://sforzinda.dreamwidth.org/profile"><img src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/user.png" alt="[personal profile] " width="17" height="17" style="vertical-align: text-bottom; border: 0; padding-right: 1px;" class="ContextualPopup-trigger"></a><a href="https://sforzinda.dreamwidth.org/"><b>sforzinda</b></a></span></span></li>
+</ul></div>
+</div>
+<div class="module-cuttagcontrols module"><h2 class="module-header">Expand Cut Tags</h2>
+<div class="module-content">
+<span class="cutTagControls"><span style="font-size: smaller;">No cut tags</span></span></div>
+</div>
+</div>
+</div><div class="separator separator-after"><div class="inner"></div></div>
+</div>
+                    </div></div><!--  end secondary and secondary>inner -->
+    
+                    <div id="invisible-separator" style="float: left; width: 1px;"></div> <!-- this is a hack for IE7 + two-columns-right -->
+                    <div id="tertiary"><div class="inner">
+                        <div class="module-wrapper"><div class="separator separator-before"><div class="inner"></div></div>
+<div class="module-section-two">
+<div class="inner"><div class="module-time module"><div class="module-content">
+<span id="load-time">Page generated Jan. 5th, 2024 05:52 am</span></div>
+</div>
+<div class="module-powered module"><div class="module-content">
+<span id="site-branding">Powered by <a href="https://www.dreamwidth.org/">Dreamwidth Studios</a></span></div>
+</div>
+</div>
+</div><div class="separator separator-after"><div class="inner"></div></div>
+</div>
+                    </div></div><!-- end tertiary and tertiary>inner -->
+                    <div id="content-footer"></div>
+    <div id="footer">
+        <div class="inner">
+            
+                <div class="page-top"><a href="https://jpnix.dreamwidth.org/2094.html#">Top of page</a></div>
+        </div>
+    </div>
+                </div>
+            </div> 
+        </div> 
+    
+
+
+    </div> <!-- end canvas -->
+    <script type="text/javascript" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/saved_resource(2)"></script>
+<script type="text/javascript" src="./jpnix _ Setting up Nagios to publish alerts to SNS topic in AWS_files/saved_resource(3)"></script>
+
+<script type="text/javascript">
+jQuery(function(jQ){
+    if (jQ("#lj_controlstrip").length == 0) {
+        jQ.getJSON("/jpnix/__rpc_controlstrip?user=jpnix&host=jpnix.dreamwidth.org&uri=/2094.html&args=&view=entry", {},
+            function(data) {
+                jQ("<div></div>").html(data.control_strip).prependTo("body");
+            }
+        );
+    }
+})
+</script><script>$(document).foundation();</script><div id="statistics" style="text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;"></div><div id="torrent-scanner-popup" style="display: none;"><template shadowrootmode="open"><link rel="stylesheet" href="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/css/custom.css"><div id="yf-bt-wrapper" class="free"><div class="header"><img class="sts-logo" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/ts-free-logo.png"><div class="search-content"><input id="search-input" class="search-input" type="search" placeholder="Start your search here..."><span id="search-btn" class="search-btn"></span></div></div><div class="container"><div class="main-container"><div id="torrent-data" class="torrent-content"><div class="t-table"><div class="t-header"><div class="t-name">Torrent search results</div></div><div id="checked-sites" class="checked-sites-section"><div class="left">Checked Sites</div><div class="right"><span id="sites-count" class="sites-count">0</span></div></div><div id="table-body" class="t-body"><div id="loading" class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div><div class="table-message-container" id="table-message"><p>No items to list <br> Use the search bar above for instant results</p></div></div></div></div><div class="tooltip"><p class="tooltip-text">To see search results, type here and hit `Enter`</p></div><div class="footer"><span><span id="numberScanned" class="numberScanned">No results</span></span></div><div class="upgradeProPanel"><div class="upgradeProPanelTitle">Try our Pro Versions to unlock:</div><div class="upgradeProPanelList"><div><p>Faster Results</p></div><div><p>Secure Torrenting</p></div><div><p>Unlimited Search Results with detailed torrent info</p></div><div><p>1-YR Subscription to CyberGhost VPN <span style="font-size:8px;">(PRO+VPN only)</span></p></div></div><a class="upgrade-to-pro-button-2" id="buy-pro-vpn" href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner" target="_blank">BUY PRO + VPN</a><a class="upgrade-to-pro-button-2" id="buy-pro" href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner" target="_blank">BUY PRO</a></div></div><div class="sync-container nav-se-container"><div class="nav-se-content"><img class="sync-icon nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-sync.svg"><div class="nav-se-title">One more step to go before you start torrenting!</div><p class="nav-se-text">This extension can sync results with BitTorrent and/or uTorrent for instant downloading.</p><p class="nav-se-text">To activate this feature, please click on the button below, and then on the Chrome message to activate the 'Messaging Permission'.</p><button class="sync-permission-btn nav-se-btn">Activate Messaging Permission</button></div><div class="nav-se-content display-none"><img class="sync-icon nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-sync.svg"><div class="nav-se-title">Syncing...</div><p class="nav-se-text">Please allow Messaging Permissions in the proceeding Chrome message.</p></div><div class="nav-se-content display-none"><img class="sync-icon nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-success.svg"><div class="nav-se-title">Sync Complete</div><p class="nav-se-text">You have successfully activated the “Messaging Permission” feature. All your search results will sync with BitTorrent and/or uTorrent.</p></div></div><div class="license-container nav-se-container"><div class="nav-se-content"><img class="nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-key2.svg"><div class="nav-se-title">Enter License Key</div><p class="nav-se-text">Enter your license key and click on the activate button to start using <span>µTorrent Web Pro.</span></p><input type="text" id="license-input-key" class="license-input-key" placeholder="Enter Key"><div class="license-spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div><button id="license-activate-button" class="license-activate-button nav-se-btn">Activate</button><p>Don't have a license key? <a class="license-buy-link" target="_blank">Click here</a></p></div><div class="nav-se-content display-none"><img class="nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-success.svg"><div class="nav-se-title">Happy Torrenting!</div><p class="nav-se-text">You are now an active PRO user</p><p class="nav-se-text">Your key is valid until <span class="expiry-date"></span></p></div><div class="nav-se-content display-none"><img class="nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-alert.svg"><div class="nav-se-title">Your license key has expired</div><p class="nav-se-text">Looks like your license key has expired, to renew your PRO license key, please select a license type:</p><a class="upgrade-to-pro-button-2 buy-license-expiry-button" href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner" target="_blank">Buy Pro + VPN</a><a class="upgrade-to-pro-button-2 buy-license-expiry-button" href="https://www.utorrent.com/webpro-offer/?utm_source=Lavasoft&amp;utm_medium=version_1.0&amp;utm_campaign=Scanner" target="_blank">Buy Pro</a><p class="nav-se-text">Already have a license key? <a class="link" id="show-license-panel">Click here</a></p></div><div class="nav-se-content display-none"><img class="nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-success.svg"><div class="nav-se-title">Pro User</div><p class="nav-se-text">Your key is valid until <span class="expiry-date"></span></p><p class="nav-se-text">Your License Key:</p><p class="nav-se-text"></p><p class="nav-se-text margin-top-50">Switch back to Torrent Scanner Free?</p><button class="activate-free-btn nav-se-btn">Revert to Free Version</button></div></div><div class="feedback-container nav-se-container"><div class="nav-se-content"><img class="nav-se-icon" src="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/img/assets/icon-feedback.svg"><div class="nav-se-title">Feedback</div><p class="nav-se-text">Help us improve Torrent Scanner, send us comments, bugs, feedback, and suggestions.</p><button id="feedback-button" class="feedback-button nav-se-btn">Send Feedback</button></div></div><div class="settings-container nav-se-container"><div class="nav-se-content"><div class="settings-title">Settings</div></div><div class="s-table"><div class="s-row"><div class="s-title">FAQ<div class="s-arrow"><span class="arrow-down"></span></div></div><div class="s-content faq-content"><p class="faq-text">FAQ: <a href="chrome-extension://aegnopegbbhjeeiganiajffnalhlkkjb/faq.html" target="_blank">Click here</a></p></div></div><div class="s-row"><div class="s-title">Rate the extension<div class="s-arrow"><span class="arrow-down"></span></div></div><div class="s-content"><p class="rate-text">How did you like the extension experience?</p><div class="rating"><span class="rating-star">★</span><span class="rating-star">★</span><span class="rating-star">★</span><span class="rating-star">★</span><span class="rating-star">★</span></div><button class="rating-btn nav-se-btn" disabled="">Submit</button></div></div><div class="s-row"><div class="s-title">About<div class="s-arrow"><span class="arrow-down"></span></div></div><div class="s-content about-content"><div class="about-version">Version 1.3.0 <br><br> What's New</div><div class="about-new"><p></p><ul><li>Experience a complete new User Interface of the extension. It is enhanced and user friendly now.</li><li>Squashed some bugs.</li></ul><p></p></div></div></div><div class="s-row"><div class="s-title">Privacy Policy<div class="s-arrow"><span class="arrow-down"></span></div></div><div class="s-content"><div class="policy-text">Adaware Software (7270356 Canada Inc.) is the operator of the Adaware products suites and related services (the “<b>Company</b>”, ”<b>we</b>” or “<b>us</b>”). We respect your privacy rights and we are committed to protecting them. This privacy policy (“<b>Privacy Policy</b>” or simply “<b>policy</b>”) governs our products, services and websites that link to this Privacy Policy, and describes our practices of processing data from you. By “<b>you</b>”, we refer to either or all of the following: (i) visitors to our websites that links to this Privacy Policy (“<b>Visitor</b>” and “<b>Website</b>”, respectively); (ii) our customers using our software products and Services (“<b>User</b>”); and (c) a business customer, a business partner that has a contractual relationship with us or a prospective customer that is yet to be engaged in a contract with us (“Business Customer”). Unless explicitly mentioned otherwise, the information in this Privacy Policy refers to any and all data subject types (“you” or “your’). <br><br> For the purpose of this policy, the “<b>Service(s)</b>” shall include any software licensed by the Company, including features offered by or within the installed software or additional software scripts available therein (either downloaded from one of our websites, pre-installed on your device, downloaded through a third party website, obtained on a physical medium, or otherwise), or services provided through and/or on top such software, services offered on our websites, communication forums, support services, account operation, updates, enhancements, new features, premium support, extended guarantees, online version and free versions of a software or additional services or features as we ay make available from time to time. <br><br> If you are a California resident, please also see our <a href="https://www.adaware.com/CCPA/" target="_blank">CCPA Notice</a>. <br><br> <a href="https://www.adaware.com/privacy-policy/" target="_blank">Read more</a></div></div></div><div class="s-row" style="display: none;"><div class="s-title">Contact Us<div class="s-arrow"><span class="arrow-down"></span></div></div><div class="s-content"><div class="contact-text">For any payment and order-related support, please contact us at Email: <a href="mailto:support@torrentscanner.zendesk.com">support@torrentscanner.zendesk.com</a> or <a href="mailto:pcsoftwareinfo.com">pcsoftwareinfo.com</a><br><br>Phone: <a href="https://pcsoftwareinfo.com/contact.aspx" target="_blank">Click here</a></div></div></div></div></div></div><div class="nav"><button id="btnSync" class="nav-btn">Sync</button><button id="btnLicense" class="nav-btn">License</button><button id="btnHome" class="nav-btn">Home</button><button id="btnFeedback" class="nav-btn">Feedback</button><button id="btnSettings" class="nav-btn">Settings</button></div></div></template></div></body></html>

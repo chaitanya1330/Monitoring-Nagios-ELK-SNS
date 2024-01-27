@@ -1,0 +1,27 @@
+for grafana , prometheus , node exporter :
+
+https://jhooq.com/prometheous-grafan-setup/
+
+prometheus: 
+port : 9090
+in prometheus no need of taking another yml file..we can configure in prometheus.yml file itself
+ -> in that we will give production server ip and we will check
+
+grafana : port : 3000
+username is admin and pass is admin
+i changed the pass to chay@1234
+
+node exporter: 9100
+two servers installing node exporter
+
+
+dashboard number is 1860
+and we can use for linux memory : 2747 also
+
+
+in grafana labs you find all dashboards..which developers keep their dashboards
+
+commands:
+./prometheus --for running prometheus
+./node_exporter --for runnning node exporter
+./prometheus --config.file=prometheus.yml -- thrugh that configuration file we should run it
